@@ -1,0 +1,347 @@
+/* Un fondo fresco para que la página se sienta ligera y alegre. */
+:root {
+    color-scheme: light;
+    font-family: "Trebuchet MS", Arial, sans-serif;
+    color: #17324d;
+    background: #f4fbff;
+    scroll-behavior: smooth;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* El encabezado acompaña la navegación sin quitarle espacio al contenido. */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1rem 7%;
+    color: #fff;
+    background: #087e8b;
+    box-shadow: 0 4px 18px rgb(23 50 77 / 14%);
+}
+
+header h1 {
+    margin: 0;
+    font-size: clamp(1.2rem, 2vw, 1.7rem);
+}
+
+nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+header a,
+footer a {
+    color: inherit;
+    text-decoration: none;
+}
+
+header a {
+    display: inline-block;
+    padding: 0.4rem 0;
+    font-weight: 700;
+}
+
+header a:hover,
+header a:focus-visible {
+    color: #ffe08a;
+}
+
+main {
+    width: min(1100px, 88%);
+    margin: 0 auto;
+}
+
+section {
+    padding: 5rem 0;
+    scroll-margin-top: 6rem;
+}
+
+section h2 {
+    margin: 0 0 0.75rem;
+    color: #075c68;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    line-height: 1.2;
+}
+
+section > p {
+    max-width: 680px;
+    color: #52677a;
+}
+
+/* La portada tiene un llamado claro para encontrar los sabores. */
+#inicio {
+    display: flex;
+    min-height: 420px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 5rem clamp(1.5rem, 7vw, 5rem);
+    margin-top: 2rem;
+    overflow: hidden;
+    border-radius: 28px;
+    background:
+        radial-gradient(circle at 88% 18%, rgb(255 255 255 / 35%) 0 8%, transparent 8.5%),
+        linear-gradient(130deg, #b9f3e4, #e1f7ff 58%, #fff0c2);
+}
+
+#inicio h2 {
+    max-width: 650px;
+    color: #064f5b;
+    font-size: clamp(2.2rem, 5vw, 3.7rem);
+}
+
+#inicio p {
+    max-width: 560px;
+    margin: 0.5rem 0 1.5rem;
+    font-size: 1.1rem;
+}
+
+#inicio > a,
+form button {
+    display: inline-block;
+    border: 0;
+    border-radius: 999px;
+    padding: 0.85rem 1.4rem;
+    color: #fff;
+    background: #f07835;
+    font: inherit;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 180ms ease, background-color 180ms ease;
+}
+
+#inicio > a:hover,
+form button:hover {
+    transform: translateY(-2px);
+    background: #d95e20;
+}
+
+/* Cada sabor tiene su propio espacio y una imagen con buena proporción. */
+#sabores {
+    text-align: center;
+}
+
+#sabores > p {
+    margin: 0 auto 2rem;
+}
+
+#sabores article {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #dcecf0;
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: 0 8px 24px #17324d14;
+    text-align: left;
+    transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+#sabores article:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 14px 30px #17324d24;
+}
+
+#sabores article h3 {
+    margin: 1.1rem 1.2rem 0.35rem;
+    color: #075c68;
+    font-size: 1.25rem;
+}
+
+#sabores article p {
+    margin: 0 1.2rem 1.3rem;
+    color: #52677a;
+}
+
+#sabores {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+#sabores h2,
+#sabores > p {
+    grid-column: 1 / -1;
+}
+
+.tamaños {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+}
+
+#nosotros ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 0.75rem;
+    padding: 0;
+    list-style: none;
+}
+
+#nosotros li {
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+    background: #e4f6f3;
+}
+
+#ubicacion address,
+#ubicacion > div {
+    font-style: normal;
+}
+
+#ubicacion address {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+#ubicacion address p,
+#ubicacion > div {
+    border: 1px solid #dcecf0;
+    border-radius: 14px;
+    padding: 1rem;
+    background: #fff;
+}
+
+#ubicacion a {
+    color: #087e8b;
+}
+
+/* El formulario es amplio y cómodo para completar desde el celular. */
+#contacto {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+form {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+form div {
+    display: grid;
+    gap: 0.35rem;
+}
+
+form label {
+    font-weight: 700;
+}
+
+form input,
+form textarea {
+    width: 100%;
+    border: 1px solid #bfd4dd;
+    border-radius: 10px;
+    padding: 0.8rem 0.9rem;
+    color: inherit;
+    background: #fff;
+    font: inherit;
+}
+
+form input:focus,
+form textarea:focus {
+    border-color: #087e8b;
+    outline: 3px solid rgb(8 126 139 / 18%);
+}
+
+form textarea {
+    resize: vertical;
+}
+
+form button {
+    justify-self: start;
+}
+
+footer {
+    padding: 2.5rem 7%;
+    color: #fff;
+    background: #075c68;
+    text-align: center;
+}
+
+footer h2 {
+    margin-top: 0;
+}
+
+footer nav ul {
+    justify-content: center;
+}
+
+footer a:hover,
+footer a:focus-visible {
+    color: #ffe08a;
+}
+
+footer > p:last-child {
+    margin-bottom: 0;
+    color: #d5ecee;
+    font-size: 0.9rem;
+}
+
+/* En pantallas angostas, las tarjetas se acomodan en una sola columna. */
+@media (max-width: 760px) {
+    header {
+        position: static;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1rem 5%;
+        text-align: center;
+    }
+
+    header nav ul {
+        justify-content: center;
+    }
+
+    main {
+        width: min(92%, 600px);
+    }
+
+    #sabores {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 520px) {
+    section {
+        padding: 3.5rem 0;
+    }
+
+    #inicio {
+        min-height: 360px;
+        margin-top: 1rem;
+        border-radius: 20px;
+    }
+
+    #sabores {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+}
