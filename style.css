@@ -3,7 +3,7 @@
     color-scheme: light;
     font-family: "Trebuchet MS", Arial, sans-serif;
     color: #17324d;
-    background: #f4fbff;
+    background: #e8eef1;
     scroll-behavior: smooth;
 }
 
@@ -28,11 +28,21 @@ header {
     padding: 1rem 7%;
     color: #fff;
     background: #087e8b;
-    box-shadow: 0 4px 18px rgb(23 50 77 / 14%);
+    box-shadow: 0 4px 18px #17324d24;
+}
+
+.icono {
+    width: 64px;
+    height: 64px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: #fff7df;
+    object-fit: contain;
 }
 
 header h1 {
     margin: 0;
+    margin-right: auto;
     font-size: clamp(1.2rem, 2vw, 1.7rem);
 }
 
@@ -68,7 +78,7 @@ main {
 }
 
 section {
-    padding: 5rem 0;
+    padding: 3rem 0;
     scroll-margin-top: 6rem;
 }
 
@@ -199,7 +209,7 @@ form button:hover {
 #nosotros li {
     border-radius: 12px;
     padding: 0.85rem 1rem;
-    background: #e4f6f3;
+    background: #d1e9e4;
 }
 
 #ubicacion address,
@@ -216,7 +226,7 @@ form button:hover {
 
 #ubicacion address p,
 #ubicacion > div {
-    border: 1px solid #dcecf0;
+    border: 10px solid #dcecf0;
     border-radius: 14px;
     padding: 1rem;
     background: #fff;
@@ -308,6 +318,10 @@ footer > p:last-child {
         text-align: center;
     }
 
+    header h1 {
+        margin-right: 0;
+    }
+
     header nav ul {
         justify-content: center;
     }
@@ -344,4 +358,15 @@ footer > p:last-child {
         scroll-behavior: auto !important;
         transition-duration: 0.01ms !important;
     }
+}
+
+section {
+    opacity: 0;
+    transform: translateY(60px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+section.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
