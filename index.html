@@ -26,6 +26,7 @@
             <ul>
                 <li><a href="#inicio">Inicio</a></li>
                 <li><a href="#sabores">Sabores</a></li>
+                <li><a href="#carrito">Carrito (<span id="carrito-cantidad">0</span>)</a></li>
                 <li><a href="#nosotros">Nosotros</a></li>
                 <li><a href="#ubicacion">Ubicación</a></li>
                 <li><a href="#contacto">Contacto</a></li>
@@ -56,124 +57,18 @@
         <!-- SECCIÓN DE SABORES -->
         <section id="sabores">
 
-            <h2>Nuestros sabores</h2>
+            <h2>Nuestro catálogo</h2>
+            <p>Elige tus sabores favoritos. Cada bolo viene en su bolsita plástica y cuesta $0,50.</p>
+            <div id="catalogo" class="catalogo" aria-live="polite">Cargando sabores...</div>
+        </section>
 
-            <p>
-                Elige tu sabor favorito y disfruta de un delicioso
-                bolo refrescante.
-            </p>
-
-
-            <!-- BOLO DE MORA -->
-            <article>
-
-                <h3>Bolo de Mora</h3>
-
-                <img 
-                    src="assets/img/mora.jpg" 
-                    class="tamaños"
-                    alt="Bolo refrescante de sabor a mora"
-                >
-
-                <p>
-                    Un delicioso bolo de mora, refrescante y lleno de sabor.
-                </p>
-
-            </article>
-
-
-            <!-- BOLO DE MARACUYÁ -->
-            <article>
-
-                <h3>Bolo de Maracuyá</h3>
-
-                <img 
-                    src="assets/img/maracuya.jpg" 
-                    class="tamaños"
-                    alt="Bolo refrescante de sabor a maracuyá"
-                >
-
-                <p>
-                    El sabor tropical del maracuyá convertido en un
-                    refrescante bolo.
-                </p>
-
-            </article>
-
-
-            <!-- BOLO DE COCO -->
-            <article>
-
-                <h3>Bolo de Coco</h3>
-
-                <img 
-                    src="assets/img/coco.jpg" 
-                    class="tamaños"
-                    alt="Bolo refrescante de sabor a coco"
-                >
-
-                <p>
-                    Un sabor suave y tropical perfecto para disfrutar
-                    en un día caluroso.
-                </p>
-
-            </article>
-
-
-            <!-- BOLO DE FRESA -->
-            <article>
-
-                <h3>Bolo de Fresa</h3>
-
-                <img 
-                    src="assets/img/fresa.jpg" 
-                    class="tamaños"
-                    alt="Bolo refrescante de sabor a fresa"
-                >
-
-                <p>
-                    Delicioso sabor a fresa para disfrutar en cualquier momento.
-                </p>
-
-            </article>
-
-
-            <!-- BOLO DE MANGO -->
-            <article>
-
-                <h3>Bolo de Mango</h3>
-
-                <img 
-                    src="assets/img/mango.jpg" 
-                    class="tamaños"
-                    alt="Bolo refrescante de sabor a mango"
-                >
-
-                <p>
-                    El sabor dulce y tropical del mango en un delicioso bolo.
-                </p>
-
-            </article>
-
-
-            <!-- BOLO DE TAMARINDO -->
-            <article>
-
-                <h3>Bolo de Tamarindo</h3>
-
-                <img 
-                    src="assets/img/tamarindo.jpg" 
-                    class="tamaños"
-                    alt="Bolo refrescante de sabor a tamarindo"
-                >
-
-                <p>
-                    Una opción refrescante con el característico sabor
-                    del tamarindo.
-                </p>
-
-            </article>
-
+        <!-- El carrito y sus totales se completan desde script.js. -->
+        <section id="carrito" class="seccion-carrito">
+            <h2>Tu carrito</h2>
+            <p>Revisa las cantidades y el total antes de preparar tu pedido.</p>
+            <ul id="carrito-items" class="lista-carrito" aria-live="polite"></ul>
+            <p class="total-carrito">Total: <strong id="carrito-total">$0,00</strong></p>
+            <button id="continuar-pedido" type="button" disabled>Continuar al formulario</button>
         </section>
 
 
@@ -224,7 +119,7 @@
 
                 <p>
                     <strong>Teléfono:</strong>
-                    <a href="tel:+593999999999">
+                    <a href="tel:+593958947180">
                         +593 95 894 7180
                     </a>
                 </p>
@@ -247,7 +142,8 @@
             </p>
 
 
-            <form action="#" method="post">
+            <!-- El número va sin + ni espacios, como requiere el enlace de WhatsApp. -->
+            <form id="formulario-contacto" data-whatsapp-number="593958947180">
 
                 <!-- NOMBRE -->
                 <div>

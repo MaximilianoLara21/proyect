@@ -145,11 +145,19 @@ form button:hover {
 
 /* Cada sabor tiene su propio espacio y una imagen con buena proporción. */
 #sabores {
+    display: block;
     text-align: center;
 }
 
 #sabores > p {
     margin: 0 auto 2rem;
+}
+
+.catalogo {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+    text-align: left;
 }
 
 #sabores article {
@@ -180,15 +188,83 @@ form button:hover {
     color: #52677a;
 }
 
-#sabores {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.25rem;
+.producto-descripcion {
+    flex: 1;
 }
 
-#sabores h2,
-#sabores > p {
-    grid-column: 1 / -1;
+.producto-precio {
+    color: #075c68 !important;
+    font-weight: 700;
+}
+
+.agregar-producto,
+#continuar-pedido,
+.controles-cantidad button {
+    border: 0;
+    border-radius: 999px;
+    padding: 0.65rem 1rem;
+    color: #fff;
+    background: #087e8b;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.agregar-producto {
+    margin: 0 1.2rem 1.2rem;
+}
+
+.agregar-producto:hover,
+#continuar-pedido:not(:disabled):hover,
+.controles-cantidad button:hover {
+    background: #075c68;
+}
+
+#continuar-pedido:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.seccion-carrito {
+    max-width: 760px;
+    margin: 0 auto;
+    border-radius: 20px;
+    padding: 2rem;
+    background: #fff;
+    box-shadow: 0 8px 24px #17324d14;
+}
+
+.lista-carrito {
+    display: grid;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+    padding: 0;
+    list-style: none;
+}
+
+.carrito-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid #dcecf0;
+    padding: 0.75rem 0;
+}
+
+.controles-cantidad {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.controles-cantidad button {
+    min-width: 2.5rem;
+    padding: 0.3rem 0.6rem;
+}
+
+.total-carrito {
+    font-size: 1.15rem;
+    text-align: right;
 }
 
 .tamaños {
@@ -331,7 +407,7 @@ footer > p:last-child {
         width: min(92%, 600px);
     }
 
-    #sabores {
+    .catalogo {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
@@ -347,8 +423,17 @@ footer > p:last-child {
         border-radius: 20px;
     }
 
-    #sabores {
+    .catalogo {
         grid-template-columns: 1fr;
+    }
+
+    .seccion-carrito {
+        padding: 1.25rem;
+    }
+
+    .carrito-item {
+        align-items: flex-start;
+        flex-direction: column;
     }
 }
 

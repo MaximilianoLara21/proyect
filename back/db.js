@@ -1,7 +1,9 @@
-require("dotenv").config();
+const path = require("node:path");
+require("dotenv").config({ path: path.join(__dirname, ".env") });
 
 const { MongoClient } = require("mongodb");
 
+// La URI permanece en back/.env; nunca se envía al navegador.
 const uri = process.env.MONGODB_URI;
 
 if (!uri) {
@@ -9,11 +11,19 @@ if (!uri) {
 }
 
 const client = new MongoClient(uri);
+let connectionPromise;
 
 async function conectarDB() {
-  await client.connect();
-  console.log("MongoDB conectado correctamente");
+  // Comparte la misma conexión si varias solicitudes la necesitan a la vez.
+  if (!connectionPromise) {
+    connectionPromise = client.connect().catch((error) => {
+      connectionPromise = undefined;
+      throw error;
+    });
+  }
+
+  await connectionPromise;
   return client.db();
 }
 
-module.exports = { conectarDB };
+module.exports = { conectarDB, cerrarDB: () => client.close() };
