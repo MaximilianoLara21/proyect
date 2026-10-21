@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Completa tu pedido - Boloyaco</title>
+    <meta name="description" content="Revisa tu pedido de Boloyaco y coordínalo por WhatsApp.">
+    <link rel="icon" type="image/png" href="assets/img/boloyaco-icono.png">
+    <link rel="stylesheet" href="style.css">
+    <script src="pedido.js" defer></script>
+</head>
+<body>
+    <header>
+        <img src="assets/img/boloyaco-icono.png" alt="Icono de Boloyaco" class="icono">
+        <h1>Boloyaco</h1>
+        <nav aria-label="Navegación">
+            <ul>
+                <li><a href="index.html#sabores">Volver al catálogo</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="pagina-pedido">
+            <h2>Completa tu pedido</h2>
+            <p>Revisa el resumen y déjanos tus datos. Confirmaremos los detalles por WhatsApp.</p>
+
+            <div id="estado-pedido" role="status" aria-live="polite"></div>
+            <div id="resumen-pedido" class="resumen-pedido" hidden>
+                <h3>Resumen de tu pedido</h3>
+                <ul id="pedido-items" class="lista-carrito"></ul>
+                <p class="total-carrito">Total del pedido: <strong id="pedido-total"></strong></p>
+            </div>
+
+            <form id="formulario-pedido" data-whatsapp-number="593958947180" hidden>
+                <div>
+                    <label for="nombre">Nombre completo:</label>
+                    <input type="text" id="nombre" name="nombre" autocomplete="name" required>
+                </div>
+                <div>
+                    <label for="correo">Correo electrónico:</label>
+                    <input type="email" id="correo" name="correo" autocomplete="email" placeholder="ejemplo@correo.com" required>
+                </div>
+                <div>
+                    <label for="telefono">Teléfono de contacto (máximo 10 dígitos):</label>
+                    <input
+                        type="tel"
+                        id="telefono"
+                        name="telefono"
+                        inputmode="numeric"
+                        maxlength="10"
+                        pattern="[0-9]{10}"
+                        autocomplete="tel"
+                        placeholder="0999999999"
+                    >
+                </div>
+                <div>
+                    <label for="indicaciones">Indicaciones adicionales (opcional):</label>
+                    <textarea id="indicaciones" name="indicaciones" rows="3" placeholder="Por ejemplo, referencias para coordinar la entrega"></textarea>
+                </div>
+                <button type="submit">Continuar por WhatsApp</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <h2>Boloyaco es lo más fresco de Guayaquil.</h2>
+        <p>Deliciosos bolos para refrescar tus días en Guayaquil.</p>
+        <p>&copy; 2026 Boloyaco. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

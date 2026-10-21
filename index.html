@@ -10,6 +10,7 @@
         name="description" 
         content="Bolos refrescantes y deliciosos en la ciudad de Guayaquil, Ecuador."
     >
+    <link rel="icon" type="image/png" href="assets/img/boloyaco-icono.png">
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
 </head>
@@ -29,7 +30,7 @@
                 <li><a href="#carrito">Carrito (<span id="carrito-cantidad">0</span>)</a></li>
                 <li><a href="#nosotros">Nosotros</a></li>
                 <li><a href="#ubicacion">Ubicación</a></li>
-                <li><a href="#contacto">Contacto</a></li>
+                <li><a href="#preguntas">Preguntas frecuentes</a></li>
             </ul>
         </nav>
 
@@ -42,14 +43,21 @@
         <!-- SECCIÓN DE INICIO -->
         <section id="inicio">
 
-            <h2>Refresca tu día con nuestros deliciosos bolos</h2>
+            <div class="inicio-contenido">
+                <h2>Refresca tu día con nuestros deliciosos bolos</h2>
 
-            <p>
-                Disfruta de nuestros deliciosos bolos refrescantes,
-                preparados para ayudarte a combatir el calor de Guayaquil.
-            </p>
+                <p>
+                    Disfruta de nuestros deliciosos bolos refrescantes,
+                    preparados para ayudarte a combatir el calor de Guayaquil.
+                </p>
 
-            <a href="#sabores">Ver nuestros sabores</a>
+                <a href="#sabores">Ver nuestros sabores</a>
+            </div>
+            <img
+                class="logo-inicio"
+                src="assets/img/boloyaco-logo.png"
+                alt="Boloyaco, frescura bien guayaca"
+            >
 
         </section>
 
@@ -68,7 +76,8 @@
             <p>Revisa las cantidades y el total antes de preparar tu pedido.</p>
             <ul id="carrito-items" class="lista-carrito" aria-live="polite"></ul>
             <p class="total-carrito">Total: <strong id="carrito-total">$0,00</strong></p>
-            <button id="continuar-pedido" type="button" disabled>Continuar al formulario</button>
+            <button id="continuar-pedido" type="button" disabled>Continuar al pedido</button>
+            <p id="estado-carrito" role="status" aria-live="polite"></p>
         </section>
 
 
@@ -132,99 +141,6 @@
             </address>
         </section>
 
-        <!-- SECCIÓN DE CONTACTO -->
-        <section id="contacto">
-
-            <h2>Contáctanos</h2>
-
-            <p>
-                ¿Tienes alguna pregunta? Envíanos un mensaje.
-            </p>
-
-
-            <!-- El número va sin + ni espacios, como requiere el enlace de WhatsApp. -->
-            <form id="formulario-contacto" data-whatsapp-number="593958947180">
-
-                <!-- NOMBRE -->
-                <div>
-
-                    <label for="nombre">
-                        Nombre:
-                    </label>
-
-                    <input 
-                        type="text" 
-                        id="nombre" 
-                        name="nombre"
-                        placeholder="Escribe tu nombre"
-                        required
-                    >
-
-                </div>
-
-
-                <!-- CORREO -->
-                <div>
-
-                    <label for="correo">
-                        Correo electrónico: ejemplo@gmail.com
-                    </label>
-
-                    <input 
-                        type="email" 
-                        id="correo" 
-                        name="correo"
-                        placeholder="ejemplo@correo.com"
-                        required
-                    >
-
-                </div>
-
-
-                <!-- TELÉFONO -->
-                <div>
-
-                    <label for="telefono">
-                        Teléfono: 0999999999
-                    </label>
-
-                    <input 
-                        type="tel" 
-                        id="telefono" 
-                        name="telefono"
-                        placeholder="0999999999"
-                    >
-
-                </div>
-
-
-                <!-- MENSAJE -->
-                <div>
-
-                    <label for="mensaje">
-                        Mensaje:
-                    </label>
-
-                    <textarea 
-                        id="mensaje" 
-                        name="mensaje"
-                        rows="5"
-                        placeholder="Escribe tu mensaje"
-                        required
-                    ></textarea>
-
-                </div>
-
-
-                <!-- BOTÓN -->
-                <button type="submit">
-                    Enviar mensaje
-                </button>
-
-            </form>
-
-        </section>
-
     </main>
 
 
@@ -237,6 +153,25 @@
             Deliciosos bolos para refrescar tus días en Guayaquil.
         </p>
 
+        <section id="preguntas" aria-labelledby="preguntas-titulo">
+            <h2 id="preguntas-titulo">Preguntas frecuentes</h2>
+            <details>
+                <summary>¿Es posible incluir varios sabores en un mismo pedido?</summary>
+                <p>Sí. Puede seleccionar las cantidades deseadas de cada sabor disponible y agregarlas al carrito.</p>
+            </details>
+            <details>
+                <summary>¿Dónde puedo consultar los precios?</summary>
+                <p>El precio vigente se indica en la información de cada producto dentro del catálogo.</p>
+            </details>
+            <details>
+                <summary>¿Cómo se coordinan la entrega y su costo?</summary>
+                <p>Luego de recibir su pedido, confirmaremos por WhatsApp la disponibilidad, la ubicación de entrega y el costo correspondiente, si aplica.</p>
+            </details>
+            <details>
+                <summary>¿En qué momento se confirma el pedido?</summary>
+                <p>El pedido quedará confirmado cuando acordemos por WhatsApp las cantidades, el total y los detalles de entrega.</p>
+            </details>
+        </section>
 
         <!-- REDES SOCIALES -->
         <nav aria-label="Redes sociales">

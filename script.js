@@ -4,8 +4,7 @@ const cartItemsElement = document.querySelector("#carrito-items");
 const cartCountElement = document.querySelector("#carrito-cantidad");
 const cartTotalElement = document.querySelector("#carrito-total");
 const checkoutButton = document.querySelector("#continuar-pedido");
-const contactForm = document.querySelector("#formulario-contacto");
-const messageField = document.querySelector("#mensaje");
+const cartStatus = document.querySelector("#estado-carrito");
 // El carrito guarda el identificador del producto y las unidades elegidas.
 const cart = new Map();
 let products = [];
@@ -118,49 +117,17 @@ function renderCart() {
     checkoutButton.disabled = itemCount === 0;
 }
 
-function createOrderMessage() {
-    // Prepara el resumen que se copiará al formulario de contacto.
-    const lines = ["Hola, quiero realizar este pedido:"];
-
-    cart.forEach((quantity, productId) => {
-        const product = products.find((item) => item._id === productId);
-        if (product) {
-            lines.push(
-                `- Bolo de ${product.name}: ${quantity} × ${formatPrice(product.price)} = ${formatPrice(product.price * quantity)}`
-            );
-        }
-    });
-
-    const total = products.reduce(
-        (sum, product) => sum + product.price * (cart.get(product._id) || 0),
-        0
-    );
-    lines.push(`Total: ${formatPrice(total)}`);
-    return lines.join("\n");
-}
-
 checkoutButton.addEventListener("click", () => {
     if (cart.size === 0) return;
-    messageField.value = createOrderMessage();
-    // Lleva al cliente al formulario para completar sus datos antes de WhatsApp.
-    document.querySelector("#contacto").scrollIntoView({ behavior: "smooth" });
-    document.querySelector("#nombre").focus({ preventScroll: true });
-});
-
-contactForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const phoneNumber = contactForm.dataset.whatsappNumber;
-    const formData = new FormData(contactForm);
-    const message = [
-        `Hola, soy ${formData.get("nombre")}.`,
-        `Correo: ${formData.get("correo")}.`,
-        formData.get("telefono") ? `Teléfono: ${formData.get("telefono")}.` : "",
-        "",
-        formData.get("mensaje")
-    ].filter((line) => line !== "").join("\n");
-
-    // Codifica el mensaje para que WhatsApp lo abra con los datos del pedido.
-    window.location.href = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    const orderUrl = new URL("pedido.html", window.location.href);
+    orderUrl.searchParams.set("items", JSON.stringify(Array.from(cart.entries())));
+    const orderWindow = window.open(orderUrl.href, "_blank");
+    if (!orderWindow) {
+        cartStatus.textContent = "Tu navegador bloqueó la nueva pestaña. Permite las ventanas emergentes e inténtalo de nuevo.";
+        return;
+    }
+    orderWindow.opener = null;
+    cartStatus.textContent = "";
 });
 
 async function loadCatalog() {

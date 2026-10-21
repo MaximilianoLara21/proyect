@@ -72,7 +72,14 @@ const tiposContenido = {
     ".png": "image/png"
 };
 // Se publican solo los archivos necesarios; el resto del proyecto queda privado.
-const rutasPublicas = new Set(["/", "/index.html", "/script.js", "/style.css"]);
+const rutasPublicas = new Set([
+    "/",
+    "/index.html",
+    "/script.js",
+    "/style.css",
+    "/pedido.html",
+    "/pedido.js"
+]);
 
 async function prepararCatalogo(db) {
     const catalogo = db.collection("productos");
