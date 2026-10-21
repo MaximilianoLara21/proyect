@@ -5,9 +5,11 @@ const cartCountElement = document.querySelector("#carrito-cantidad");
 const cartTotalElement = document.querySelector("#carrito-total");
 const checkoutButton = document.querySelector("#continuar-pedido");
 const cartStatus = document.querySelector("#estado-carrito");
+const cartStorageKey = "boloyaco-carrito";
 // El carrito guarda el identificador del producto y las unidades elegidas.
 const cart = new Map();
 let products = [];
+let catalogLoaded = false;
 
 // Mantiene la animación existente y respeta el modo de movimiento reducido.
 if ("IntersectionObserver" in window) {
@@ -71,7 +73,57 @@ function changeQuantity(productId, difference) {
     } else {
         cart.set(productId, nextQuantity);
     }
+    saveCart();
     renderCart();
+}
+
+function saveCart() {
+    try {
+        localStorage.setItem(cartStorageKey, JSON.stringify(Array.from(cart.entries())));
+        cartStatus.textContent = "";
+    } catch (error) {
+        console.error("No se pudo guardar el carrito en este navegador:", error);
+        cartStatus.textContent = "No se pudo guardar el carrito en este navegador. El pedido se conservará mientras esta página siga abierta.";
+    }
+}
+
+function restoreCart() {
+    let savedItems;
+    try {
+        const savedCart = localStorage.getItem(cartStorageKey);
+        if (!savedCart) return;
+        savedItems = JSON.parse(savedCart);
+        if (!Array.isArray(savedItems)) {
+            throw new Error("El contenido guardado no tiene el formato esperado.");
+        }
+    } catch (error) {
+        console.error("No se pudo recuperar el carrito guardado:", error);
+        cartStatus.textContent = "No se pudo recuperar el carrito guardado. Puedes volver a agregar tus productos.";
+        return;
+    }
+
+    let unavailableProduct = false;
+    savedItems.forEach((entry) => {
+        if (
+            !Array.isArray(entry) ||
+            typeof entry[0] !== "string" ||
+            !Number.isSafeInteger(entry[1]) ||
+            entry[1] < 1
+        ) {
+            console.error("Se omitió un producto con datos no válidos del carrito guardado.");
+            return;
+        }
+        if (products.some((product) => product._id === entry[0])) {
+            cart.set(entry[0], entry[1]);
+        } else {
+            unavailableProduct = true;
+        }
+    });
+
+    if (unavailableProduct) {
+        saveCart();
+        cartStatus.textContent = "Se actualizaron los productos del carrito porque algunos ya no están disponibles.";
+    }
 }
 
 function renderCart() {
@@ -121,12 +173,11 @@ checkoutButton.addEventListener("click", () => {
     if (cart.size === 0) return;
     const orderUrl = new URL("pedido.html", window.location.href);
     orderUrl.searchParams.set("items", JSON.stringify(Array.from(cart.entries())));
-    const orderWindow = window.open(orderUrl.href, "_blank");
+    const orderWindow = window.open(orderUrl.href, "boloyaco-pedido");
     if (!orderWindow) {
         cartStatus.textContent = "Tu navegador bloqueó la nueva pestaña. Permite las ventanas emergentes e inténtalo de nuevo.";
         return;
     }
-    orderWindow.opener = null;
     cartStatus.textContent = "";
 });
 
@@ -139,6 +190,8 @@ async function loadCatalog() {
         }
 
         products = await response.json();
+        restoreCart();
+        catalogLoaded = true;
         renderProducts();
         renderCart();
     } catch (error) {
@@ -146,5 +199,12 @@ async function loadCatalog() {
         catalogElement.textContent = "No se pudo cargar el catálogo. Verifica que el servidor esté iniciado e inténtalo de nuevo.";
     }
 }
+
+window.addEventListener("storage", (event) => {
+    if (event.key !== cartStorageKey || !catalogLoaded) return;
+    cart.clear();
+    restoreCart();
+    renderCart();
+});
 
 loadCatalog();
