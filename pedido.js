@@ -5,6 +5,7 @@ const orderTotalElement = document.querySelector("#pedido-total");
 const orderForm = document.querySelector("#formulario-pedido");
 const phoneField = document.querySelector("#telefono");
 
+// Mostramos los precios igual que en el catálogo para que el resumen sea familiar.
 function formatPrice(price) {
     return new Intl.NumberFormat("es-EC", {
         style: "currency",
@@ -15,6 +16,7 @@ function formatPrice(price) {
 function parseOrderItems(value) {
     if (!value) return [];
 
+    // Revisamos lo que llegó desde el catálogo antes de usarlo en el pedido.
     const entries = JSON.parse(value);
     if (!Array.isArray(entries) || entries.length === 0) {
         throw new Error("El pedido está vacío o no es válido.");
@@ -48,12 +50,14 @@ async function renderOrder() {
     }
 
     try {
+        // Consultamos otra vez los sabores para mostrar nombres y precios actualizados.
         const response = await fetch("/api/productos");
         if (!response.ok) {
             throw new Error(`El servidor respondió con estado ${response.status}`);
         }
 
         const products = await response.json();
+        // Asociamos cada cantidad seleccionada con la información actual de su sabor.
         const selectedProducts = orderItems.map(([productId, quantity]) => {
             const product = products.find((item) => item._id === productId);
             if (!product) {
@@ -84,6 +88,7 @@ async function renderOrder() {
 }
 
 phoneField.addEventListener("input", () => {
+    // Evitamos que el teléfono pase del máximo indicado en el formulario.
     if (phoneField.value.length > 10) {
         phoneField.value = phoneField.value.slice(0, 10);
     }
@@ -91,6 +96,7 @@ phoneField.addEventListener("input", () => {
 
 orderForm.addEventListener("submit", (event) => {
     event.preventDefault();
+    // Reunimos los datos y productos en un mensaje listo para enviar por WhatsApp.
     const phoneNumber = orderForm.dataset.whatsappNumber;
     const formData = new FormData(orderForm);
     const items = Array.from(orderItemsElement.children, (item) => item.dataset.message);

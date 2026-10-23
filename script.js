@@ -6,12 +6,13 @@ const cartTotalElement = document.querySelector("#carrito-total");
 const checkoutButton = document.querySelector("#continuar-pedido");
 const cartStatus = document.querySelector("#estado-carrito");
 const cartStorageKey = "boloyaco-carrito";
-// El carrito guarda el identificador del producto y las unidades elegidas.
+// Guardamos el código de cada sabor y cuántos queremos, como una lista de compras.
 const cart = new Map();
 let products = [];
 let catalogLoaded = false;
 
-// Mantiene la animación existente y respeta el modo de movimiento reducido.
+// Al entrar a una sección, la mostramos suavemente; si el navegador no tiene
+// esta animación disponible, dejamos todo visible para que nadie se pierda contenido.
 if ("IntersectionObserver" in window) {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
@@ -42,8 +43,8 @@ function createElement(tag, className, text) {
     return element;
 }
 
+// Con los productos recibidos del servidor armamos una tarjeta por cada sabor.
 function renderProducts() {
-    // Construye las tarjetas con los datos que entrega la API de MongoDB.
     catalogElement.replaceChildren();
 
     products.forEach((product) => {
@@ -66,7 +67,7 @@ function renderProducts() {
 }
 
 function changeQuantity(productId, difference) {
-    // Cambia las unidades; si llegan a cero, quita el producto del carrito.
+    // Los botones suman o restan unidades; al llegar a cero, el sabor sale del carrito.
     const nextQuantity = (cart.get(productId) || 0) + difference;
     if (nextQuantity <= 0) {
         cart.delete(productId);
@@ -79,6 +80,7 @@ function changeQuantity(productId, difference) {
 
 function saveCart() {
     try {
+        // Así el carrito sigue aquí si la persona cierra y vuelve a abrir la página.
         localStorage.setItem(cartStorageKey, JSON.stringify(Array.from(cart.entries())));
         cartStatus.textContent = "";
     } catch (error) {
@@ -102,6 +104,7 @@ function restoreCart() {
         return;
     }
 
+    // Recuperamos solo cantidades válidas y sabores que todavía aparecen en el catálogo.
     let unavailableProduct = false;
     savedItems.forEach((entry) => {
         if (
@@ -127,7 +130,7 @@ function restoreCart() {
 }
 
 function renderCart() {
-    // Vuelve a dibujar el carrito y calcula cantidad y precio total.
+    // Actualizamos la lista, el número de unidades y el total cada vez que cambia algo.
     cartItemsElement.replaceChildren();
     let itemCount = 0;
     let total = 0;
@@ -171,6 +174,7 @@ function renderCart() {
 
 checkoutButton.addEventListener("click", () => {
     if (cart.size === 0) return;
+    // La siguiente página recibe los códigos y cantidades para preparar el resumen.
     const orderUrl = new URL("pedido.html", window.location.href);
     orderUrl.searchParams.set("items", JSON.stringify(Array.from(cart.entries())));
     const orderWindow = window.open(orderUrl.href, "boloyaco-pedido");
@@ -183,7 +187,7 @@ checkoutButton.addEventListener("click", () => {
 
 async function loadCatalog() {
     try {
-        // El navegador solicita los productos al servidor, no se conecta directamente a Atlas.
+        // Pedimos los sabores a nuestro servidor; el navegador no necesita entrar a la base de datos.
         const response = await fetch("/api/productos");
         if (!response.ok) {
             throw new Error(`El servidor respondió con estado ${response.status}`);
@@ -202,6 +206,7 @@ async function loadCatalog() {
 
 window.addEventListener("storage", (event) => {
     if (event.key !== cartStorageKey || !catalogLoaded) return;
+    // Si el carrito cambia en otra pestaña, ponemos esta vista al día también.
     cart.clear();
     restoreCart();
     renderCart();

@@ -3,7 +3,7 @@ require("dotenv").config({ path: path.join(__dirname, ".env") });
 
 const { MongoClient } = require("mongodb");
 
-// La URI permanece en back/.env; nunca se envía al navegador.
+// La dirección y la clave de la base viven en back/.env, fuera de lo que ve el cliente.
 const uri = process.env.MONGODB_URI;
 
 if (!uri) {
@@ -14,7 +14,7 @@ const client = new MongoClient(uri);
 let connectionPromise;
 
 async function conectarDB() {
-  // Comparte la misma conexión si varias solicitudes la necesitan a la vez.
+  // Reutilizamos la conexión para que las distintas partes del servidor trabajen con la misma base.
   if (!connectionPromise) {
     connectionPromise = client.connect().catch((error) => {
       connectionPromise = undefined;

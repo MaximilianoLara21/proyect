@@ -10,6 +10,7 @@
     <script src="pedido.js" defer></script>
 </head>
 <body>
+    <!-- Desde aquí se puede volver a los sabores sin perderse en el sitio. -->
     <header>
         <img src="assets/img/boloyaco-icono.png" alt="Icono de Boloyaco" class="icono">
         <h1>Boloyaco</h1>
@@ -25,6 +26,7 @@
             <h2>Completa tu pedido</h2>
             <p>Revisa el resumen y déjanos tus datos. Confirmaremos los detalles por WhatsApp.</p>
 
+            <!-- El resumen y el formulario se muestran cuando pedido.js confirma el pedido. -->
             <div id="estado-pedido" role="status" aria-live="polite"></div>
             <div id="resumen-pedido" class="resumen-pedido" hidden>
                 <h3>Resumen de tu pedido</h3>
@@ -32,6 +34,7 @@
                 <p class="total-carrito">Total del pedido: <strong id="pedido-total"></strong></p>
             </div>
 
+            <!-- Estos datos nos ayudan a coordinar; las indicaciones adicionales son opcionales. -->
             <form id="formulario-pedido" data-whatsapp-number="593958947180" hidden>
                 <div>
                     <label for="nombre">Nombre completo:</label>
@@ -63,6 +66,7 @@
         </div>
     </main>
 
+    <!-- Un cierre sencillo mantiene esta página en línea con el resto del sitio. -->
     <footer>
         <h2>Boloyaco es lo más fresco de Guayaquil.</h2>
         <p>Deliciosos bolos para refrescar tus días en Guayaquil.</p>

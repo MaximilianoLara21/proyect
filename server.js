@@ -5,7 +5,7 @@ const { conectarDB, cerrarDB } = require("./back/db");
 
 const ROOT = __dirname;
 const PORT = Number(process.env.PORT) || 3000;
-// Estos productos se agregan a Atlas solo cuando todavía no existen.
+// Esta es la carta inicial: sirve para preparar la base la primera vez que se inicia el sitio.
 const productosIniciales = [
     {
         _id: "mora",
@@ -71,7 +71,7 @@ const tiposContenido = {
     ".js": "text/javascript; charset=utf-8",
     ".png": "image/png"
 };
-// Se publican solo los archivos necesarios; el resto del proyecto queda privado.
+// El sitio solo entrega estas páginas y sus imágenes; otros archivos del proyecto no son públicos.
 const rutasPublicas = new Set([
     "/",
     "/index.html",
@@ -84,7 +84,7 @@ const rutasPublicas = new Set([
 async function prepararCatalogo(db) {
     const catalogo = db.collection("productos");
 
-    // upsert crea los sabores que faltan y conserva los datos ya editados en Atlas.
+    // Si un sabor ya existe, respetamos sus cambios; solo agregamos los que todavía faltan.
     await Promise.all(
         productosIniciales.map((producto) =>
             catalogo.updateOne(
@@ -119,7 +119,7 @@ async function manejarSolicitud(request, response, db) {
             return;
         }
 
-        // La API devuelve únicamente productos activos y en el orden del catálogo.
+        // La página recibe únicamente los sabores disponibles, en el orden pensado para mostrarlos.
         const productos = await db.collection("productos")
             .find({ active: true })
             .project({ name: 1, description: 1, price: 1, image: 1, order: 1 })
@@ -150,6 +150,7 @@ async function manejarSolicitud(request, response, db) {
 
     const requestedFile = pathname === "/" ? "index.html" : pathname.slice(1);
     const filePath = path.resolve(ROOT, requestedFile);
+    // Nos aseguramos de que una dirección no permita salir de la carpeta del sitio.
     if (filePath !== ROOT && !filePath.startsWith(`${ROOT}${path.sep}`)) {
         responderJson(response, 403, { error: "Acceso denegado." });
         return;
@@ -172,7 +173,7 @@ async function manejarSolicitud(request, response, db) {
 }
 
 async function iniciarServidor() {
-    // Atlas debe estar disponible antes de iniciar el sitio y su catálogo.
+    // Primero preparamos la base y el catálogo; después ponemos el sitio a disposición.
     const db = await conectarDB();
     await prepararCatalogo(db);
 
@@ -192,6 +193,7 @@ async function iniciarServidor() {
     });
 
     const detenerServidor = () => {
+        // Al cerrar la aplicación, también cerramos la conexión con la base de datos.
         server.close(async (error) => {
             if (error) {
                 console.error("Error al cerrar el servidor:", error);
