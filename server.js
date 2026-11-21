@@ -4,6 +4,7 @@ const path = require("node:path");
 const { conectarDB, cerrarDB } = require("./back/db");
 
 const ROOT = __dirname;
+// Aquí queda la versión de React que se muestra cuando se publica el sitio.
 const FRONTEND_DIST = path.join(ROOT, "frontend", "dist");
 const PORT = Number(process.env.PORT) || 3000;
 // Esta es la carta inicial: sirve para preparar la base la primera vez que se inicia el sitio.
@@ -152,6 +153,7 @@ async function manejarSolicitud(request, response, db) {
     }
 
     const isBuiltFrontendFile = esRutaAplicacion || esRecursoCompilado || esFavicon;
+    // Las imágenes se leen de frontend/public; el resto del sitio viene de la compilación.
     const staticRoot = isBuiltFrontendFile
         ? FRONTEND_DIST
         : esImagenPublica

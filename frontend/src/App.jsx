@@ -4,6 +4,7 @@ import './style.css'
 const CART_STORAGE_KEY = 'boloyaco-carrito'
 const WHATSAPP_NUMBER = '593958947180'
 
+// Presenta los precios con dólares y el formato que usamos en Ecuador.
 function formatPrice(price) {
   return new Intl.NumberFormat('es-EC', {
     style: 'currency',
@@ -120,6 +121,7 @@ function ProductCatalog({ products, loading, onAdd }) {
       {loading ? (
         <div className="catalogo" aria-live="polite">Cargando sabores...</div>
       ) : products.length > 0 ? (
+        // Mostramos los sabores que llegaron del servidor.
         <div className="catalogo" aria-live="polite">
           {products.map((product) => (
             <article className="producto" key={product._id}>
@@ -150,6 +152,7 @@ function ProductCatalog({ products, loading, onAdd }) {
 }
 
 function Cart({ cart, products, status, onChangeQuantity, onContinueError }) {
+  // Sumamos las cantidades y sus precios para mostrar el total del carrito.
   const itemCount = Array.from(cart.values()).reduce((sum, quantity) => sum + quantity, 0)
   const total = Array.from(cart.entries()).reduce((sum, [productId, quantity]) => {
     const product = products.find((item) => item._id === productId)
@@ -158,6 +161,7 @@ function Cart({ cart, products, status, onChangeQuantity, onContinueError }) {
 
   function continueToOrder() {
     if (cart.size === 0) return
+    // Enviamos los productos elegidos a la página donde se completa el pedido.
     const orderUrl = new URL('/pedido.html', window.location.origin)
     orderUrl.searchParams.set('items', JSON.stringify(Array.from(cart.entries())))
     const orderWindow = window.open(orderUrl.href, 'boloyaco-pedido')
@@ -254,6 +258,7 @@ function parseSavedCart(value, products) {
     throw new Error('El contenido guardado no tiene el formato esperado.')
   }
 
+  // Conservamos solo cantidades válidas y sabores que todavía existen.
   const cart = new Map()
   let unavailableProduct = false
   entries.forEach((entry) => {
@@ -278,6 +283,7 @@ function parseSavedCart(value, products) {
 function ElfsightChatbot() {
   useEffect(() => {
     if (document.getElementById('elfsight-platform-script')) return
+    // Cargamos el chat una sola vez cuando aparece la página.
     const script = document.createElement('script')
     script.id = 'elfsight-platform-script'
     script.src = 'https://elfsightcdn.com/platform.js'
@@ -296,6 +302,7 @@ function HomePage() {
   const [cartStatus, setCartStatus] = useState('')
 
   useEffect(() => {
+    // Las secciones aparecen suavemente cuando la persona llega hasta ellas.
     const observer = 'IntersectionObserver' in window
       ? new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
@@ -319,6 +326,7 @@ function HomePage() {
     const controller = new AbortController()
     async function loadCatalog() {
       try {
+        // Pedimos los sabores y recuperamos el carrito guardado en este navegador.
         const response = await fetch('/api/productos', { signal: controller.signal })
         if (!response.ok) {
           throw new Error(`El servidor respondió con estado ${response.status}`)
@@ -353,6 +361,7 @@ function HomePage() {
     function syncCart(event) {
       if (event.key !== CART_STORAGE_KEY || !catalogLoaded) return
       try {
+        // Si el carrito cambia en otra pestaña, actualizamos esta vista también.
         const restored = parseSavedCart(event.newValue, products)
         setCart(restored.cart)
         if (restored.unavailableProduct) {
@@ -382,6 +391,7 @@ function HomePage() {
     }
     setCart(nextCart)
     try {
+      // Así el carrito se mantiene si se cierra y se vuelve a abrir la página.
       localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(Array.from(nextCart.entries())))
       setCartStatus('')
     } catch (error) {
@@ -416,6 +426,7 @@ function HomePage() {
 
 function parseOrderItems(value) {
   if (!value) return []
+  // Revisamos los productos y cantidades recibidos antes de preparar el pedido.
   const entries = JSON.parse(value)
   if (!Array.isArray(entries) || entries.length === 0) {
     throw new Error('El pedido está vacío o no es válido.')
@@ -451,6 +462,7 @@ function OrderPage() {
       }
 
       try {
+        // Consultamos el catálogo para usar los nombres y precios actuales.
         const response = await fetch('/api/productos', { signal: controller.signal })
         if (!response.ok) {
           throw new Error(`El servidor respondió con estado ${response.status}`)
@@ -479,6 +491,7 @@ function OrderPage() {
 
   function submitOrder(event) {
     event.preventDefault()
+    // Reunimos los datos y productos en un mensaje listo para WhatsApp.
     const formData = new FormData(event.currentTarget)
     const total = order.reduce((sum, { product, quantity }) => sum + product.price * quantity, 0)
     const message = [
@@ -567,6 +580,7 @@ function OrderPage() {
 }
 
 export default function App() {
+  // La dirección indica si mostramos la página principal o el pedido.
   const isOrderPage = window.location.pathname === '/pedido.html' || window.location.pathname === '/pedido'
   return isOrderPage ? <OrderPage /> : <HomePage />
 }
