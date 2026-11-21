@@ -4,6 +4,7 @@ const path = require("node:path");
 const { conectarDB, cerrarDB } = require("./back/db");
 
 const ROOT = __dirname;
+const FRONTEND_DIST = path.join(ROOT, "frontend", "dist");
 const PORT = Number(process.env.PORT) || 3000;
 // Esta es la carta inicial: sirve para preparar la base la primera vez que se inicia el sitio.
 const productosIniciales = [
@@ -69,16 +70,15 @@ const tiposContenido = {
     ".jpg": "image/jpeg",
     ".jpeg": "image/jpeg",
     ".js": "text/javascript; charset=utf-8",
-    ".png": "image/png"
+    ".png": "image/png",
+    ".svg": "image/svg+xml",
+    ".webp": "image/webp"
 };
 // El sitio solo entrega estas páginas y sus imágenes; otros archivos del proyecto no son públicos.
 const rutasPublicas = new Set([
     "/",
     "/index.html",
-    "/script.js",
-    "/style.css",
-    "/pedido.html",
-    "/pedido.js"
+    "/pedido.html"
 ]);
 
 async function prepararCatalogo(db) {
@@ -135,7 +135,10 @@ async function manejarSolicitud(request, response, db) {
     }
 
     const esImagenPublica = /^\/assets\/img\/[a-zA-Z0-9_-]+\.(jpg|jpeg|png)$/.test(requestUrl.pathname);
-    if (!rutasPublicas.has(requestUrl.pathname) && !esImagenPublica) {
+    const esRutaAplicacion = ["/", "/index.html", "/pedido.html", "/pedido"].includes(requestUrl.pathname);
+    const esRecursoCompilado = /^\/assets\/[a-zA-Z0-9._-]+\.(js|css)$/.test(requestUrl.pathname);
+    const esFavicon = requestUrl.pathname === "/favicon.svg";
+    if (!rutasPublicas.has(requestUrl.pathname) && !esImagenPublica && !esRutaAplicacion && !esRecursoCompilado && !esFavicon) {
         responderJson(response, 404, { error: "No se encontró el recurso solicitado." });
         return;
     }
@@ -148,10 +151,16 @@ async function manejarSolicitud(request, response, db) {
         return;
     }
 
-    const requestedFile = pathname === "/" ? "index.html" : pathname.slice(1);
-    const filePath = path.resolve(ROOT, requestedFile);
+    const isBuiltFrontendFile = esRutaAplicacion || esRecursoCompilado || esFavicon;
+    const staticRoot = isBuiltFrontendFile
+        ? FRONTEND_DIST
+        : esImagenPublica
+            ? path.join(ROOT, "frontend", "public")
+            : ROOT;
+    const requestedFile = esRutaAplicacion ? "index.html" : pathname.slice(1);
+    const filePath = path.resolve(staticRoot, requestedFile);
     // Nos aseguramos de que una dirección no permita salir de la carpeta del sitio.
-    if (filePath !== ROOT && !filePath.startsWith(`${ROOT}${path.sep}`)) {
+    if (filePath !== staticRoot && !filePath.startsWith(`${staticRoot}${path.sep}`)) {
         responderJson(response, 403, { error: "Acceso denegado." });
         return;
     }

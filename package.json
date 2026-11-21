@@ -1,6 +1,8 @@
 {
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "npm --prefix frontend run build",
+    "dev": "npm --prefix frontend run dev"
   },
   "dependencies": {
     "dotenv": "^18.0.8",
